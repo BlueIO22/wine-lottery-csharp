@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wine-lottery-csharp", "wine-lottery-csharp.csproj", "{3C1FA88E-C370-43A0-8073-54824C802CAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C1FA88E-C370-43A0-8073-54824C802CAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C1FA88E-C370-43A0-8073-54824C802CAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C1FA88E-C370-43A0-8073-54824C802CAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C1FA88E-C370-43A0-8073-54824C802CAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2BF7790-95D9-413C-9C43-9C10C2175E3F}
+	EndGlobalSection
+EndGlobal
