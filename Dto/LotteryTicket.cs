@@ -1,15 +1,27 @@
-﻿namespace wine_lottery_csharp.Dto
+﻿using wine_lottery_csharp.Context.Dal;
+
+namespace wine_lottery_csharp.Dto
 {
     [Serializable]
     public class LotteryTicket
     {
         public Guid Id { get; set; }   
         public int Number { get; set; }
-        public string CustomerId { get; set; } = string.Empty;
+        public Guid CustomerId { get; set; } = Guid.Empty;
 
         public bool IsFree ()
         {
-            return CustomerId == string.Empty;
+            return CustomerId == Guid.Empty;
+        }
+
+        public Ticket ToTicketDal()
+        {
+            return new Ticket
+            {
+                Id = Id,
+                CustomerId = CustomerId,
+                Number = Number
+            };
         }
     }
 }

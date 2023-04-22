@@ -1,12 +1,30 @@
-﻿namespace wine_lottery_csharp.Dto
+﻿using wine_lottery_csharp.Context.Dal;
+
+namespace wine_lottery_csharp.Dto
 {
     [Serializable]
     public class CustomerProfile
     {
-        public string CustomerId { get; set; } = string.Empty;
+        public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public Address Address { get; set; } = new Address();
         public List<LotteryTicket> Tickets { get; set; } = new List<LotteryTicket>();
+
+        public Customer ToCustomerDal()
+        {
+            return new Customer
+            {
+                Id = Guid.NewGuid(),
+                Name = Name,
+                Email = Email,
+                City = Address.City,
+                StreetName = Address.StreetName,
+                Country = Address.Country,
+                PostalCode = Address.PostalCode
+
+            };
+        }
 
     }
 

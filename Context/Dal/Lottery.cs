@@ -2,10 +2,9 @@
 {
     public class Lottery
     {
-        public int id { get; set; }
-        public string name { get; set; } = string.Empty;
-        public Guid customerId { get; set; } = Guid.Empty;
-        public Guid ticketId { get; set; } = Guid.Empty;
-        public Guid wineId { get; set; } = Guid.Empty;
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public int NumberOfTickets { get; set; }
+        public Guid WineId { get; set; } = Guid.Empty;
     }
 }
