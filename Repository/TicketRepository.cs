@@ -21,33 +21,12 @@ namespace wine_lottery_csharp.Repository
         public async Task CreateTickets(List<LotteryTicket> tickets)
         {
             await _lotteryDbContext.Ticket.AddRangeAsync(tickets.Select(ticket => ticket.ToTicketDal()).ToList());
+            await _lotteryDbContext.SaveChangesAsync();
         }
 
-        public async Task<ResponseStatus> CreateTicketsByNumberOfTickets(int numberOfTickets, Guid lotteryId)
+        public async Task<ResponseStatus> CreateTicketsByNumberOfTickets(int numberOfTickets, string lotteryId)
         {
-            List<Ticket> tickets = new List<Ticket>();
-
-            for (var i = 0; i < numberOfTickets; i++)
-            {
-                var ticket = new Ticket
-                {
-                    CustomerId = Guid.Empty,
-                    Id = Guid.NewGuid(),
-                    LotteryId = lotteryId,
-
-                };
-
-                var randomNumber = 0;
-
-                while (!_lotteryHelper.DoesNumberExsistInList(tickets.Select(t => t.Number).ToList()))
-                {
-                    randomNumber = _lotteryHelper.GetRandomNumberForTicket();
-                }
-
-                ticket.Number = randomNumber;
-
-                tickets.Add(ticket);
-            }
+            List<Ticket> tickets = _lotteryHelper.GenerateLotteryTickets(numberOfTickets, lotteryId);
 
             if (tickets.Count != numberOfTickets)
             {
@@ -55,11 +34,12 @@ namespace wine_lottery_csharp.Repository
             }
 
             await _lotteryDbContext.Ticket.AddRangeAsync(tickets);
+            await _lotteryDbContext.SaveChangesAsync();
 
             return ResponseStatus.OK;
         }
 
-        public List<LotteryTicket> MarkLotteryTickets(Guid customerId, int numberOfTickets, Guid lotteryId)
+        public List<LotteryTicket> MarkLotteryTickets(string customerId, int numberOfTickets, string lotteryId)
         {
             var tickets = _lotteryDbContext.Ticket.Where(ticket => ticket.LotteryId == lotteryId).ToList();
 
@@ -72,20 +52,22 @@ namespace wine_lottery_csharp.Repository
             filteredTickets.ForEach(ticket => ticket.CustomerId = customerId);
 
             _lotteryDbContext.Ticket.UpdateRange(filteredTickets);
+            _lotteryDbContext.SaveChanges();
 
             return _lotteryDbContext.Ticket.Where(ticket => ticket.CustomerId == customerId).Select(ticket => ticket.ToLotteryTicket()).ToList();
 
         }
 
-        public Task RemoveLotteryTicketByNumber(int number, Guid lotteryId)
+        public Task RemoveLotteryTicketByNumber(int number, string lotteryId)
         {
             var foundLotteryTicket = _lotteryDbContext.Ticket.Where(ticket => ticket.Number == number && ticket.LotteryId == lotteryId).SingleOrDefault();
             if (foundLotteryTicket == null) { return Task.CompletedTask; }
             _lotteryDbContext.Ticket.Remove(foundLotteryTicket);
+            _lotteryDbContext.SaveChanges();
             return Task.CompletedTask;
         }
 
-        public List<LotteryTicket> RetrieveTicketsByCustomerId(Guid customerId)
+        public List<LotteryTicket> RetrieveTicketsByCustomerId(string customerId)
         {
             return _lotteryDbContext.Ticket.Where(ticket => ticket.CustomerId == customerId).Select(ticket => ticket.ToLotteryTicket()).ToList();
         }

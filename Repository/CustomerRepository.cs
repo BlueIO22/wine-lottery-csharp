@@ -15,11 +15,12 @@ namespace wine_lottery_csharp.Repository
         public async Task CreateCustomer(Customer customer)
         {
             await _lotteryDbContext.Customer.AddAsync(customer);
+            await _lotteryDbContext.SaveChangesAsync();
         }
 
-        public CustomerProfile? RetrieveCustomer(Guid customerId, bool includeTickets)
+        public CustomerResponse? RetrieveCustomer(Guid customerId, bool includeTickets)
         {
-            return _lotteryDbContext.Customer.Where(customer => customer.Id == customerId).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
+            return _lotteryDbContext.Customer.Where(customer => customer.Id == customerId.ToString()).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
         }
     }
 }

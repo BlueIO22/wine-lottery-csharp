@@ -6,8 +6,8 @@ namespace wine_lottery_csharp.Handlers.Interfaces
 {
     public interface ICustomerHandler
     {
-        ResponseStatus RegisterCustomer(CustomerRequest customerRequest);
+        Task<ResponseStatus> RegisterCustomer(CustomerRequest customerRequest);
 
-        Task<Response<CustomerProfile>> GetCustomer(string customerId, bool includeTickets);
+        Task<Response<CustomerResponse>> GetCustomer(string customerId, bool includeTickets);
     }
 }

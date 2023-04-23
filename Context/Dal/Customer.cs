@@ -4,7 +4,7 @@ namespace wine_lottery_csharp.Context.Dal
 {
     public class Customer
     {
-        public Guid Id { get; set; } = Guid.Empty;
+        public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
@@ -12,11 +12,11 @@ namespace wine_lottery_csharp.Context.Dal
         public string StreetName { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public CustomerProfile ToCustomerProfile()
+        public CustomerResponse ToCustomerProfile()
         {
-            return new CustomerProfile
+            return new CustomerResponse
             {
-                Id = Id,
+                Id = Guid.Parse(Id),
                 Email = Email,
                 Name = Name,
                 Address = new Address

@@ -1,4 +1,5 @@
 ﻿using wine_lottery_csharp.Context.Dal;
+using wine_lottery_csharp.Dto.Request;
 
 namespace wine_lottery_csharp.Repository.Interfaces
 {
@@ -6,6 +7,8 @@ namespace wine_lottery_csharp.Repository.Interfaces
     {
         public Task CreateWine(Wine wine);
 
-        public Wine? RetrieveWineByWineId(Guid wineId);
+        public Wine? RetrieveWineByWineId(string wineId);
+
+        List<WineResponse> RetrieveWinesByLotteryId(string lotteryId);
     }
 }

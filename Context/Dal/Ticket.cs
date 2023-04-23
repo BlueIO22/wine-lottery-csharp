@@ -4,18 +4,18 @@ namespace wine_lottery_csharp.Context.Dal
 {
     public class Ticket
     {
-        public Guid Id { get; set; } = Guid.Empty;
+        public string Id { get; set; } = string.Empty;
         public int Number { get; set; }
-        public Guid CustomerId { get; set; } = Guid.Empty;
-        public Guid LotteryId { get; set; } = Guid.Empty;
+        public string CustomerId { get; set; } = string.Empty;
+        public string LotteryId { get; set; } = string.Empty;
 
         public LotteryTicket ToLotteryTicket()
         {
             return new LotteryTicket
             {
-                Id = Id,
+                Id = Guid.Parse(Id),
                 Number = Number,
-                CustomerId = CustomerId
+                CustomerId = Guid.Parse(CustomerId)
             };
         }
     }

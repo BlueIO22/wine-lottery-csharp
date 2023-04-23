@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using wine_lottery_csharp.Dal.Context;
 using wine_lottery_csharp.Handlers;
 using wine_lottery_csharp.Handlers.Interfaces;
+using wine_lottery_csharp.Repository;
+using wine_lottery_csharp.Repository.Helpers;
+using wine_lottery_csharp.Repository.Interfaces;
 using wine_lottery_csharp.services.interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +15,24 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<LotteryDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:AZURE_SQL_CONNECTIONSTRING"]));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Services
 builder.Services.AddSingleton<IPaymentService, PaymentService>();
-builder.Services.AddSingleton<IPaymentHandler, PaymentHandler>();
+
+// Repositories
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ILotteryRepository, LotteryRepository>();
+builder.Services.AddScoped<IWineRepository, WineRepository>();
+
+// Helpers
+builder.Services.AddSingleton<ILotteryHelper, LotteryHelper>();
+
+// Handlers
+builder.Services.AddScoped<ICustomerHandler, CustomerHandler>();
+builder.Services.AddScoped<ILotteryHandler, LotteryHandler>();
+builder.Services.AddScoped<IPaymentHandler, PaymentHandler>();
+
 
 var app = builder.Build();
 

@@ -3,7 +3,8 @@
 namespace wine_lottery_csharp.Services.Types
 {
     [Serializable]
-    public class PaymentRequest {
+    public class PaymentRequest
+    {
 
         public long Amount { get; set; }
 
@@ -21,7 +22,7 @@ namespace wine_lottery_csharp.Services.Types
 
         public void SetPaymentMethodId(string id)
         {
-            PaymentMethodId = id;   
+            PaymentMethodId = id;
         }
 
         public PaymentIntentCreateOptions ToPaymentIntentCreateOptions()
@@ -34,7 +35,7 @@ namespace wine_lottery_csharp.Services.Types
                 Customer = CustomerId,
                 Description = Description,
                 PaymentMethod = PaymentMethodId
-             };
+            };
         }
     }
 }

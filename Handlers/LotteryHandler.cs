@@ -1,5 +1,5 @@
-﻿using wine_lottery_csharp.Context.Dal;
-using wine_lottery_csharp.Dto;
+﻿using wine_lottery_csharp.Dto;
+using wine_lottery_csharp.Dto.Request;
 using wine_lottery_csharp.Enums;
 using wine_lottery_csharp.Handlers.Interfaces;
 using wine_lottery_csharp.Repository.Interfaces;
@@ -21,40 +21,43 @@ namespace wine_lottery_csharp.Handlers
             _wineRepository = wineRepository;
         }
 
-        public Task<Response<LotteryDto>> GetLotteryByName(string lotteryName)
+        public Task<Response<LotteryResponse>> GetLotteryByName(string lotteryName)
         {
             var lottery = _lotteryRepository.RetrieveLotteryByName(lotteryName);
 
-            if (lottery == null) return Task.FromResult(new Response<LotteryDto>
+            if (lottery == null) return Task.FromResult(new Response<LotteryResponse>
             {
                 Status = ResponseStatus.NOT_FOUND
             });
 
-            LotteryDto lotteryDto = new LotteryDto
+            LotteryResponse lotteryDto = new LotteryResponse
             {
                 Name = lottery.Name,
                 NumberOfTickets = lottery.NumberOfTickets,
             };
 
             // retrieve Wine
-            lotteryDto.Wine = _wineRepository.RetrieveWineByWineId(lottery.Id) ?? new Wine();
+            lotteryDto.Wines = _wineRepository.RetrieveWinesByLotteryId(lottery.Id);
 
             // retrieve customers
 
             // retrieve tickets
 
 
-            return Task.FromResult(new Response<LotteryDto> { Data = lotteryDto });
+            return Task.FromResult(new Response<LotteryResponse> { Data = lotteryDto });
         }
 
-        public ResponseStatus RegisterLottery(LotteryDto lottery)
+        public async Task<ResponseStatus> RegisterLottery(LotteryRequest lotteryDto)
         {
             try
             {
-                lottery.Wine.Id = Guid.NewGuid();
-                _wineRepository.CreateWine(lottery.Wine);
-                _ticketRepository.CreateTicketsByNumber(lottery.NumberOfTickets);
-                _lotteryRepository.CreateLottery(lottery.ToLottery());
+                var lotteryId = Guid.NewGuid().ToString();
+
+                var lottery = lotteryDto.ToLottery();
+                lottery.Id = lotteryId;
+                await CreateWine(lotteryDto, lotteryId);
+                await _lotteryRepository.CreateLottery(lottery);
+                await _ticketRepository.CreateTicketsByNumberOfTickets(lottery.NumberOfTickets, lottery.Id);
             }
             catch (Exception)
             {
@@ -63,7 +66,15 @@ namespace wine_lottery_csharp.Handlers
             return ResponseStatus.OK;
         }
 
-        public Task<Response<LotteryResultDto>> RunLottery(string lotteryName)
+        private async Task CreateWine(LotteryRequest lotteryDto, string lotteryId)
+        {
+            foreach (WineRequest wine in lotteryDto.Wines)
+            {
+                await _wineRepository.CreateWine(wine.ToWineDal(lotteryId));
+            }
+        }
+
+        public Task<Response<LotteryResult>> RunLottery(string lotteryName)
         {
             throw new NotImplementedException();
         }

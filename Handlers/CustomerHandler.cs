@@ -15,13 +15,13 @@ namespace wine_lottery_csharp.Handlers.Interfaces
             _ticketRepository = ticketRepository;
         }
 
-        public Task<Response<CustomerProfile>> GetCustomer(string customerId, bool includeTickets)
+        public Task<Response<CustomerResponse>> GetCustomer(string customerId, bool includeTickets)
         {
-            CustomerProfile? customer = _customerRepository.RetrieveCustomer(Guid.Parse(customerId), includeTickets);
+            CustomerResponse? customer = _customerRepository.RetrieveCustomer(Guid.Parse(customerId), includeTickets);
 
             if (customer == null)
             {
-                return Task.FromResult(new Response<CustomerProfile>
+                return Task.FromResult(new Response<CustomerResponse>
                 {
                     Status = ResponseStatus.NOT_FOUND
                 });
@@ -29,20 +29,20 @@ namespace wine_lottery_csharp.Handlers.Interfaces
 
             if (includeTickets)
             {
-                customer.Tickets = _ticketRepository.RetrieveTicketsByCustomerId(customer.Id);
+                customer.Tickets = _ticketRepository.RetrieveTicketsByCustomerId(customer.Id.ToString());
             }
 
-            return Task.FromResult(new Response<CustomerProfile>
+            return Task.FromResult(new Response<CustomerResponse>
             {
                 Data = customer
             });
         }
 
-        public ResponseStatus RegisterCustomer(CustomerRequest customerRequest)
+        public async Task<ResponseStatus> RegisterCustomer(CustomerRequest customerRequest)
         {
             try
             {
-                _customerRepository.CreateCustomer(customerRequest.ToCustomerDal());
+                await _customerRepository.CreateCustomer(customerRequest.ToCustomerDal());
                 return ResponseStatus.OK;
             }
             catch (Exception ex)

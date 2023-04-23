@@ -5,11 +5,11 @@ namespace wine_lottery_csharp.Dto
     [Serializable]
     public class LotteryTicket
     {
-        public Guid Id { get; set; }   
+        public Guid Id { get; set; }
         public int Number { get; set; }
         public Guid CustomerId { get; set; } = Guid.Empty;
 
-        public bool IsFree ()
+        public bool IsFree()
         {
             return CustomerId == Guid.Empty;
         }
@@ -18,8 +18,8 @@ namespace wine_lottery_csharp.Dto
         {
             return new Ticket
             {
-                Id = Id,
-                CustomerId = CustomerId,
+                Id = Id.ToString(),
+                CustomerId = CustomerId.ToString(),
                 Number = Number
             };
         }

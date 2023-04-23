@@ -1,4 +1,6 @@
-﻿namespace wine_lottery_csharp.Repository.Helpers
+﻿using wine_lottery_csharp.Context.Dal;
+
+namespace wine_lottery_csharp.Repository.Helpers
 {
     public interface ILotteryHelper
     {
@@ -8,6 +10,8 @@
 
         public int GetRandomNumberForTicket();
 
-        public bool DoesNumberExsistInList(List<int> numbers);
+        public bool ListDoesContainNumber(List<int> numbers, int number);
+
+        public List<Ticket> GenerateLotteryTickets(int numberOfTickets, string lotteryId);
     }
 }

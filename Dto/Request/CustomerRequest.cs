@@ -29,7 +29,7 @@ namespace wine_lottery_csharp.Services.Dto
                 PostalCode = Address != null ? int.Parse(Address.PostalCode) : 0,
                 Country = Address?.Country ?? string.Empty,
                 Email = Email,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid().ToString()
             };
         }
     }

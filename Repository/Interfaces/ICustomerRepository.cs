@@ -7,6 +7,6 @@ namespace wine_lottery_csharp.Repository.Interfaces
     {
         public Task CreateCustomer(Customer customer);
 
-        public CustomerProfile? RetrieveCustomer(Guid customerId, bool includeTickets);
+        public CustomerResponse? RetrieveCustomer(Guid customerId, bool includeTickets);
     }
 }

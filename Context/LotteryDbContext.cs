@@ -3,11 +3,11 @@ using wine_lottery_csharp.Context.Dal;
 
 namespace wine_lottery_csharp.Dal.Context
 {
-    public class LotteryDbContext: DbContext
+    public class LotteryDbContext : DbContext
     {
         public LotteryDbContext(DbContextOptions<LotteryDbContext> options)
-            : base (options) 
-        { 
+            : base(options)
+        {
         }
 
         public DbSet<Customer> Customer { get; set; }
