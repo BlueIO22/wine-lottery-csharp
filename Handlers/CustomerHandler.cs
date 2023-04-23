@@ -38,16 +38,32 @@ namespace wine_lottery_csharp.Handlers.Interfaces
             });
         }
 
-        public async Task<ResponseStatus> RegisterCustomer(CustomerRequest customerRequest)
+        public Task<Response<CustomerResponse?>> GetCustomerByName(string name)
+        {
+            var customer = _customerRepository.RetrieveCustomerByName(name);
+
+            if (customer == null)
+            {
+                return Task.FromResult(new Response<CustomerResponse?> { Status = ResponseStatus.NOT_FOUND });
+            }
+
+            return Task.FromResult(new Response<CustomerResponse?> { Data = customer });
+        }
+
+        public async Task<Response<string>> RegisterCustomer(CustomerRequest customerRequest)
         {
             try
             {
-                await _customerRepository.CreateCustomer(customerRequest.ToCustomerDal());
-                return ResponseStatus.OK;
+                var customerId = await _customerRepository.CreateCustomer(customerRequest.ToCustomerDal());
+                if (customerId == null)
+                {
+                    return await Task.FromResult(new Response<string> { Status = ResponseStatus.COULD_NOT_INSERT_ENTRY });
+                }
+                return await Task.FromResult(new Response<string> { Data = customerId });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return ResponseStatus.UNKNOWN_ERROR;
+                return await Task.FromResult(new Response<string> { Status = ResponseStatus.UNKNOWN_ERROR });
             }
         }
     }

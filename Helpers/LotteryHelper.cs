@@ -4,10 +4,22 @@ namespace wine_lottery_csharp.Repository.Helpers
 {
     public class LotteryHelper : ILotteryHelper
     {
-        public List<int> GetRandomNumbers(List<int> numbers, int numberOfTickets)
+        public List<int> GetRandomNumbers(List<int> numbers, List<int> takenNumbers, int numberOfTickets)
         {
+            List<int> result = new List<int>();
+
             Random random = new Random();
-            return numbers.Select(number => random.Next(numbers.Count)).Take(numberOfTickets).ToList();
+            numbers.ForEach(number =>
+            {
+                int nextNumber = random.Next(1, numbers.Count);
+                while (!numbers.Contains(nextNumber) || result.Contains(nextNumber))
+                {
+                    nextNumber = random.Next(1, numbers.Count);
+                }
+                result.Add(nextNumber);
+            });
+
+            return result.Take(numberOfTickets).ToList();
         }
 
         public int GetRandomNumber(List<int> numbers)
@@ -38,7 +50,6 @@ namespace wine_lottery_csharp.Repository.Helpers
                     CustomerId = string.Empty,
                     Id = Guid.NewGuid().ToString(),
                     LotteryId = lotteryId,
-
                 };
 
                 ticket.Number = i + 1;

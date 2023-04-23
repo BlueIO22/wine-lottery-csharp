@@ -13,7 +13,7 @@ namespace wine_lottery_csharp.Dto.Request
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = Name,
-                Price = Price,
+                Price = (decimal)Price,
                 LotteryId = lotteryId
             };
         }

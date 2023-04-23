@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using wine_lottery_csharp.Controllers.Interfaces;
 using wine_lottery_csharp.Dto.Request;
 using wine_lottery_csharp.Handlers.Interfaces;
-using wine_lottery_csharp.Services.Dto;
-using wine_lottery_csharp.Services.Types;
+using wine_lottery_csharp.Helpers;
 
 namespace wine_lottery_csharp.Controllers
 {
@@ -14,61 +13,60 @@ namespace wine_lottery_csharp.Controllers
         private readonly IPaymentHandler _paymentHandler;
         private readonly ICustomerHandler _customerHandler;
         private readonly ILotteryHandler _lotteryHandler;
+        private readonly ILotteryOrchestrator _lotteryOrchestrator;
 
-        public LotteryController(IPaymentHandler paymentHandler, ICustomerHandler customerHandler, ILotteryHandler lotteryHandler)
+        public LotteryController(IPaymentHandler paymentHandler, ICustomerHandler customerHandler, ILotteryHandler lotteryHandler, ILotteryOrchestrator lotteryOrchestrator)
         {
             _paymentHandler = paymentHandler;
             _customerHandler = customerHandler;
             _lotteryHandler = lotteryHandler;
-        }
-
-        [HttpPost("register-account")]
-        public async Task<IActionResult> RegisterAccount([FromBody] CustomerRequest customerRequest)
-        {
-            if (customerRequest == null) return BadRequest();
-
-            return Ok(new
-            {
-                name = "hello"
-            });
-        }
-
-        [HttpPost("purchase-ticket")]
-        public async Task<ActionResult> PurchaseTicket([FromBody] PaymentRequest paymentRequest)
-        {
-            if (paymentRequest == null) return BadRequest();
-
-
-
-            return Ok(new
-            {
-                name = "hello world"
-            });
+            _lotteryOrchestrator = lotteryOrchestrator;
         }
 
         [HttpPost]
-        public async Task<ActionResult> InsertCustomer([FromBody] CustomerRequest customerRequest)
+        public async Task<ActionResult> RegisterLottery([FromBody] LotteryRequest request)
         {
-            await _customerHandler.RegisterCustomer(customerRequest);
+            var result = await _lotteryHandler.RegisterLottery(request);
 
-            return Ok();
+            return Ok(result);
         }
 
-        [HttpGet("get-customer")]
-        public async Task<ActionResult> GetCustomer(string customerId)
+        [HttpPut("purchase-tickets")]
+        public async Task<ActionResult> PurchaseTickets([FromBody] PurchaseTicketRequest request)
         {
-            var result = await _customerHandler.GetCustomer(customerId, false);
+            var result = await _paymentHandler.PurchaseLotteryTickets(request);
 
-            return Ok(new
-            {
-                customer = result.Data
-            });
+            return Ok(result);
         }
 
-        [HttpPost("register-lottery")]
-        public async Task<ActionResult> CreateLottery([FromBody] LotteryRequest lottery)
+        [HttpGet("retrieve-customer")]
+        public async Task<ActionResult> GetCustomerById(string customerId, bool includeTickets)
         {
-            var result = await _lotteryHandler.RegisterLottery(lottery);
+            var result = await _customerHandler.GetCustomer(customerId, includeTickets);
+
+            return Ok(result);
+        }
+
+        [HttpPut("run-lottery")]
+        public async Task<ActionResult> RunLottery([FromBody] RunLotteryRequest request)
+        {
+            var result = await _lotteryOrchestrator.RunLottery(Guid.Parse(request.LotteryId));
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetLotteryById(string lotteryId)
+        {
+            var result = await _lotteryHandler.GetLotteryById(Guid.Parse(lotteryId));
+
+            return Ok(result);
+        }
+
+        [HttpPost("reset-tickets")]
+        public async Task<ActionResult> ResetLotteryTickets([FromBody] ResetLotteryTicketsRequest request)
+        {
+            var result = await _lotteryHandler.ResetLotteryTickets(Guid.Parse(request.LotteryId), request.NumberOfTickets);
 
             return Ok(result);
         }

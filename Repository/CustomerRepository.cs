@@ -12,15 +12,21 @@ namespace wine_lottery_csharp.Repository
         {
             _lotteryDbContext = lotteryContext;
         }
-        public async Task CreateCustomer(Customer customer)
+        public async Task<string> CreateCustomer(Customer customer)
         {
-            await _lotteryDbContext.Customer.AddAsync(customer);
+            var generatedCustomer = await _lotteryDbContext.Customer.AddAsync(customer);
             await _lotteryDbContext.SaveChangesAsync();
+            return generatedCustomer.Entity.Id;
         }
 
         public CustomerResponse? RetrieveCustomer(Guid customerId, bool includeTickets)
         {
             return _lotteryDbContext.Customer.Where(customer => customer.Id == customerId.ToString()).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
+        }
+
+        public CustomerResponse? RetrieveCustomerByName(string name)
+        {
+            return _lotteryDbContext.Customer.Where(customer => customer.Name == name).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
         }
     }
 }

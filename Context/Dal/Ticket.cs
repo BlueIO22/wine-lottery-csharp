@@ -11,11 +11,19 @@ namespace wine_lottery_csharp.Context.Dal
 
         public LotteryTicket ToLotteryTicket()
         {
+
+            var customerId = Guid.Empty;
+
+            if (Guid.TryParse(CustomerId, out var parsedCusomterId))
+            {
+                customerId = parsedCusomterId;
+            }
+
             return new LotteryTicket
             {
                 Id = Guid.Parse(Id),
                 Number = Number,
-                CustomerId = Guid.Parse(CustomerId)
+                CustomerId = customerId
             };
         }
     }

@@ -7,5 +7,6 @@ namespace wine_lottery_csharp.Repository.Interfaces
         public Task CreateLottery(Lottery lottery);
 
         public Lottery? RetrieveLotteryByName(string name);
+        public Lottery? RetrieveLotteryById(string lotteryId);
     }
 }

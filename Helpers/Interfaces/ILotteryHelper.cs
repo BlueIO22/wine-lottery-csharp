@@ -4,7 +4,7 @@ namespace wine_lottery_csharp.Repository.Helpers
 {
     public interface ILotteryHelper
     {
-        public List<int> GetRandomNumbers(List<int> numbers, int numberOfTickets);
+        public List<int> GetRandomNumbers(List<int> numbers, List<int> takenNumbers, int numberOfTickets);
 
         public int GetRandomNumber(List<int> numbers);
 

@@ -20,14 +20,21 @@ namespace wine_lottery_csharp.Repository
             await _context.SaveChangesAsync();
         }
 
+        public Task RemoveWine(Wine wine)
+        {
+            _context.Wine.Remove(wine);
+            _context.SaveChanges();
+            return Task.CompletedTask;
+        }
+
         public Wine? RetrieveWineByWineId(string wineId)
         {
             throw new NotImplementedException();
         }
 
-        public List<WineResponse> RetrieveWinesByLotteryId(string wineId)
+        public List<WineResponse> RetrieveWinesByLotteryId(string lotteryId)
         {
-            return _context.Wine.Where(wine => wine.Id == wineId).Select(wine => wine.ToWineResponse()).ToList();
+            return _context.Wine.Where(wine => wine.LotteryId == lotteryId).Select(wine => wine.ToWineResponse()).ToList();
         }
     }
 }

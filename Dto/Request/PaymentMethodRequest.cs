@@ -3,7 +3,8 @@
 namespace wine_lottery_csharp.Services.Types
 {
     [Serializable]
-    public class PaymentMethodRequest {
+    public class PaymentMethodRequest
+    {
 
         public string Number { get; set; } = string.Empty;
 
@@ -20,12 +21,12 @@ namespace wine_lottery_csharp.Services.Types
                 Type = "card",
                 Card = new PaymentMethodCardOptions
                 {
-                    Number = Number,   
+                    Number = Number,
                     ExpMonth = ExpireMonth,
                     ExpYear = ExpireYear,
                     Cvc = Cvc
                 }
-             };
+            };
         }
     }
 }

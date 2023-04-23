@@ -10,5 +10,6 @@ namespace wine_lottery_csharp.Repository.Interfaces
         public Wine? RetrieveWineByWineId(string wineId);
 
         List<WineResponse> RetrieveWinesByLotteryId(string lotteryId);
+        Task RemoveWine(Wine wine);
     }
 }

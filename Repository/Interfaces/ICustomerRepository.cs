@@ -5,8 +5,8 @@ namespace wine_lottery_csharp.Repository.Interfaces
 {
     public interface ICustomerRepository
     {
-        public Task CreateCustomer(Customer customer);
-
+        public Task<string> CreateCustomer(Customer customer);
         public CustomerResponse? RetrieveCustomer(Guid customerId, bool includeTickets);
+        public CustomerResponse? RetrieveCustomerByName(string name);
     }
 }

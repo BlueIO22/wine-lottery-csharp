@@ -12,18 +12,13 @@ namespace wine_lottery_csharp.Services.Types
 
         public string Source { get; set; } = "tok_visa";
 
-        public string CustomerId { get; set; } = String.Empty;
+        public string CustomerId { get; set; } = string.Empty;
+
+        public Customer StripeCustomer { get; set; } = new Customer();
 
         public string Description { get; set; } = string.Empty;
 
         public string PaymentMethodId { get; set; } = string.Empty;
-
-        public PaymentMethodRequest PaymentMethod { get; set; } = new PaymentMethodRequest();
-
-        public void SetPaymentMethodId(string id)
-        {
-            PaymentMethodId = id;
-        }
 
         public PaymentIntentCreateOptions ToPaymentIntentCreateOptions()
         {
@@ -32,7 +27,7 @@ namespace wine_lottery_csharp.Services.Types
                 Amount = Amount,
                 Currency = Currency,
                 Confirm = true,
-                Customer = CustomerId,
+                Customer = StripeCustomer.Id,
                 Description = Description,
                 PaymentMethod = PaymentMethodId
             };

@@ -16,7 +16,7 @@ namespace wine_lottery_csharp.services.interfaces
 
             _paymentIntentService = new PaymentIntentService();
             _customerService = new CustomerService();
-            _paymentMethodService = new PaymentMethodService(); 
+            _paymentMethodService = new PaymentMethodService();
         }
 
         public async Task<Customer> CreateCustomer(CustomerRequest customerRequest)
@@ -32,6 +32,16 @@ namespace wine_lottery_csharp.services.interfaces
         public async Task<PaymentMethod> CreatePaymentMethod(PaymentMethodRequest paymentMethodRequest)
         {
             return await _paymentMethodService.CreateAsync(paymentMethodRequest.ToPaymentMethodCreateOptions());
+        }
+
+        public async Task<Customer?> GetCustomerByName(string name)
+        {
+            var result = await _customerService.SearchAsync(new CustomerSearchOptions
+            {
+                Query = $"name:'{name}'"
+            });
+
+            return result.FirstOrDefault();
         }
     }
 }

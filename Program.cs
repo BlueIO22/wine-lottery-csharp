@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using wine_lottery_csharp.Dal.Context;
 using wine_lottery_csharp.Handlers;
 using wine_lottery_csharp.Handlers.Interfaces;
+using wine_lottery_csharp.Helpers;
 using wine_lottery_csharp.Repository;
 using wine_lottery_csharp.Repository.Helpers;
 using wine_lottery_csharp.Repository.Interfaces;
@@ -28,7 +29,12 @@ builder.Services.AddScoped<IWineRepository, WineRepository>();
 // Helpers
 builder.Services.AddSingleton<ILotteryHelper, LotteryHelper>();
 
+// Orchestrator
+builder.Services.AddScoped<ILotteryOrchestrator, LotteryOrchestrator>();
+
 // Handlers
+builder.Services.AddScoped<IWineHandler, WineHandler>();
+builder.Services.AddScoped<ITicketHandler, TicketHandler>();
 builder.Services.AddScoped<ICustomerHandler, CustomerHandler>();
 builder.Services.AddScoped<ILotteryHandler, LotteryHandler>();
 builder.Services.AddScoped<IPaymentHandler, PaymentHandler>();

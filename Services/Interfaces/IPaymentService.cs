@@ -9,5 +9,6 @@ namespace wine_lottery_csharp.services.interfaces
         public Task<PaymentMethod> CreatePaymentMethod(PaymentMethodRequest paymentMethodRequest);
         public Task<PaymentIntent> CreatePayment(PaymentRequest payment);
         public Task<Customer> CreateCustomer(CustomerRequest payment);
+        public Task<Customer?> GetCustomerByName(string name);
     }
 }
