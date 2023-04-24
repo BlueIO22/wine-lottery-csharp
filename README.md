@@ -5,7 +5,9 @@ Dette er et vinlotteri api, som benytter seg av stripe som betalingsløsning
 Å lage et vin lotteri som har ulike viner som loddes ut. Brukere kan kjøpe lodd, og lotteriet vil trekke ett tilfeldig lodd per vin. Fra vinen med lavest pris til den dyreste. 
 
 ## løsning
-Løsningen er laget i .Net Core, og bruker .NET 6. Den er laget som et Web Api, og har flere endepunkt som ein kan se dokumentasjon på i swagger. Den bruker Stripe.Net til integrasjon med Stripe, denne er bare satt opp til test. APIet er laget med SOLID prinsippet til grunn. Der hver av stegene(handler, repositories, controllers) er bundet med interfaces. Applikasjonen har også noen enhetstester for å dekke at den funker som den skal. 
+Løsningen er laget i .Net Core, og bruker .NET 6. Den er laget som et Web Api, og har flere endepunkt som en kan se dokumentasjon på i swagger. Den bruker Stripe.Net til integrasjon med Stripe, denne er bare satt opp til test. Apiet benytter __Interface segregation principle__ for å skille mellom de ulike lagene. koden skiller seg med Controllers som er ytterpunktet. Deretter er det meste av buisness logikken satt i LotteryOrchestrator, som orkestrerer kjøringen av lotteriet og i Handlerene. Det siste laget er __Data Access Layer__ som jeg har benevnet med Repositories. Alle lagene er skile med interfaces. 
+
+Jeg hadde veldig lyst å legge til testing, men jeg fikk endel problemer med å sette opp test prosjektet, og for lite tid denne omgang til å gjøre det skikkelig.
 
 her er bilde av arkitektur: 
 
