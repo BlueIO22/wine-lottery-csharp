@@ -20,5 +20,8 @@ Ved Cli:
  Applikasjonen kan kjøres ved:
  ``` dotnet run ```
  
- ## Database config finnes ikke i application.json, den er arvet i miljøvariabel i azure. Diagram for databaseoppsett er her: 
+ ## Database 
+ ```ConnectionStrings``` finnes ikke i application.json, den er arvet i miljøvariabel i azure. 
+ 
+ Diagram for databaseoppsett er her: 
  
