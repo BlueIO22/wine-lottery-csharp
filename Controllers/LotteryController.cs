@@ -72,9 +72,9 @@ namespace wine_lottery_csharp.Controllers
         }
         
         [HttpGet("get-feedback")]
-        public Task<ActionResult> GetFeedback(string lmao) 
+        public Task<IActionResult> GetFeedback(string lmao) 
         {
-            return Task.FromResult(Ok(new { name = lmao }));    
+            return Ok(new { name = lmao });    
         }
     }
 
