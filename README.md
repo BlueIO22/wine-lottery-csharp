@@ -5,7 +5,7 @@ Dette er et vinlotteri api, som benytter seg av stripe som betalingsløsning
 Å lage et vin lotteri som har ulike viner som loddes ut. Brukere kan kjøpe lodd, og lotteriet vil trekke ett tilfeldig lodd per vin. Fra vinen med lavest pris til den dyreste. 
 
 ## løsning
-Løsningen er laget i .Net Core, og bruker .NET 6. Den er laget som et Web Api, og har flere endepunkt som ein kan se dokumentasjon på i swagger. Den bruker Stripe.Net til integrasjon med Stripe, denne er bare satt opp til test. APIet er laget med SOLID prinsippet til grunn. Og applikasjonen har noen enhetstester for å dekke at den funker som den skal. 
+Løsningen er laget i .Net Core, og bruker .NET 6. Den er laget som et Web Api, og har flere endepunkt som ein kan se dokumentasjon på i swagger. Den bruker Stripe.Net til integrasjon med Stripe, denne er bare satt opp til test. APIet er laget med SOLID prinsippet til grunn. Der hver av stegene(handler, repositories, controllers) er bundet med interfaces. Applikasjonen har også noen enhetstester for å dekke at den funker som den skal. 
 
 her er bilde av arkitektur: 
 
@@ -24,4 +24,6 @@ Ved Cli:
  ```ConnectionStrings``` finnes ikke i application.json, den er arvet i miljøvariabel i azure. 
  
  Diagram for databaseoppsett er her: 
- 
+
+ <img width="803" alt="image" src="https://user-images.githubusercontent.com/16582039/234012633-0a453097-71b5-4a70-b47d-20b6e2df8cb9.png">
+
