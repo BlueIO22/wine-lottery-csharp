@@ -3,6 +3,7 @@ using wine_lottery_csharp.Dto;
 using wine_lottery_csharp.Dto.Request;
 using wine_lottery_csharp.Enums;
 using wine_lottery_csharp.Handlers.Interfaces;
+using wine_lottery_csharp.Repository.Helpers;
 using wine_lottery_csharp.Repository.Interfaces;
 
 namespace wine_lottery_csharp.Handlers
@@ -13,13 +14,15 @@ namespace wine_lottery_csharp.Handlers
         private ITicketRepository _ticketRepository;
         private ICustomerRepository _customerRepository;
         private IWineRepository _wineRepository;
+        private ILotteryHelper _lotteryHelper;
 
-        public LotteryHandler(ILotteryRepository lotteryRepository, ITicketRepository ticketRepository, ICustomerRepository customerRepository, IWineRepository wineRepository)
+        public LotteryHandler(ILotteryRepository lotteryRepository, ITicketRepository ticketRepository, ICustomerRepository customerRepository, IWineRepository wineRepository, ILotteryHelper lotteryHelper)
         {
             _lotteryRepository = lotteryRepository;
             _ticketRepository = ticketRepository;
             _customerRepository = customerRepository;
             _wineRepository = wineRepository;
+            _lotteryHelper = lotteryHelper;
         }
 
         public Task<Response<LotteryResponse>> GetLotteryByName(string lotteryName)
@@ -35,15 +38,14 @@ namespace wine_lottery_csharp.Handlers
             {
                 Name = lottery.Name,
                 NumberOfTickets = lottery.NumberOfTickets,
+                Status = _lotteryHelper.GetStatusString(lottery.GetLotteryStatus())
             };
 
-            // retrieve Wine
             lotteryDto.Wines = _wineRepository.RetrieveWinesByLotteryId(lottery.Id);
 
-            // retrieve customers
+            lotteryDto.Customers = _customerRepository.RetrieveCustomersByLotteryId(lottery.Id);
 
-            // retrieve tickets
-
+            lotteryDto.Tickets = _ticketRepository.RetrieveTicketsByLotteryId(lottery.Id);
 
             return Task.FromResult(new Response<LotteryResponse> { Data = lotteryDto });
         }
@@ -126,6 +128,11 @@ namespace wine_lottery_csharp.Handlers
             }
 
             return Task.FromResult(new Response<Lottery?> { Data = lottery });
+        }
+
+        public Task MarkLotteryAsFinished(Guid lotteryId)
+        {
+            return _lotteryRepository.MarkLotteryAsFinished(lotteryId.ToString());
         }
     }
 }

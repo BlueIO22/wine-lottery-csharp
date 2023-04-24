@@ -6,6 +6,8 @@ namespace wine_lottery_csharp.Dto
     {
         public string Name { get; set; } = string.Empty;
         public int NumberOfTickets { get; set; }
+
+        public string Status { get; set; } = string.Empty;
         public List<CustomerResponse> Customers { get; set; } = new List<CustomerResponse>();
         public List<LotteryTicket> Tickets { get; set; } = new List<LotteryTicket>();
         public List<WineResponse> Wines { get; set; } = new List<WineResponse>();

@@ -5,6 +5,6 @@ namespace wine_lottery_csharp.Handlers.Interfaces
 {
     public interface IPaymentHandler
     {
-        Task<List<LotteryTicket>> PurchaseLotteryTickets(PurchaseTicketRequest payment);
+        Task<Response<List<LotteryTicket>>> PurchaseLotteryTickets(PurchaseTicketRequest payment);
     }
 }

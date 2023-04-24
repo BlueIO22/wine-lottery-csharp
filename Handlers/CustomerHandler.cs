@@ -57,7 +57,7 @@ namespace wine_lottery_csharp.Handlers.Interfaces
                 var customerId = await _customerRepository.CreateCustomer(customerRequest.ToCustomerDal());
                 if (customerId == null)
                 {
-                    return await Task.FromResult(new Response<string> { Status = ResponseStatus.COULD_NOT_INSERT_ENTRY });
+                    return await Task.FromResult(new Response<string> { Status = ResponseStatus.COULD_NOT_CREATE_CUSTOMER });
                 }
                 return await Task.FromResult(new Response<string> { Data = customerId });
             }

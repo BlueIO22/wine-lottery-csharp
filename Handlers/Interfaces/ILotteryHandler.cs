@@ -14,5 +14,6 @@ namespace wine_lottery_csharp.Handlers.Interfaces
         public Task<Response<Lottery?>> GetLotteryById(Guid lotteryId);
 
         public Task<ResponseStatus> ResetLotteryTickets(Guid lotteryId, int numberOfTickets);
+        Task MarkLotteryAsFinished(Guid lotteryId);
     }
 }

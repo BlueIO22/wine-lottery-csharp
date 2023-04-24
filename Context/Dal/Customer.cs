@@ -12,7 +12,7 @@ namespace wine_lottery_csharp.Context.Dal
         public string StreetName { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public CustomerResponse ToCustomerProfile()
+        public CustomerResponse ToCustomerResponse()
         {
             return new CustomerResponse
             {

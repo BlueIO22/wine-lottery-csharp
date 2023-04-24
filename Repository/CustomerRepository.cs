@@ -21,12 +21,25 @@ namespace wine_lottery_csharp.Repository
 
         public CustomerResponse? RetrieveCustomer(Guid customerId, bool includeTickets)
         {
-            return _lotteryDbContext.Customer.Where(customer => customer.Id == customerId.ToString()).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
+            return _lotteryDbContext.Customer.Where(customer => customer.Id == customerId.ToString()).Select(customer => customer.ToCustomerResponse()).SingleOrDefault();
         }
 
         public CustomerResponse? RetrieveCustomerByName(string name)
         {
-            return _lotteryDbContext.Customer.Where(customer => customer.Name == name).Select(customer => customer.ToCustomerProfile()).SingleOrDefault();
+            return _lotteryDbContext.Customer.Where(customer => customer.Name == name).Select(customer => customer.ToCustomerResponse()).SingleOrDefault();
+        }
+
+        public List<CustomerResponse> RetrieveCustomersByLotteryId(string id)
+        {
+            var tickets = _lotteryDbContext.Ticket.Where(ticket => ticket.LotteryId == id).ToList();
+
+            var customerGrouping = tickets.Where(ticket => ticket.CustomerId.Length > 0).GroupBy(group => group.CustomerId).ToList();
+
+            var customerIds = customerGrouping.Select(grouping => grouping.Key).ToList();
+
+            var customers = _lotteryDbContext.Customer.Where(customer => customerIds.Contains(customer.Id)).Select(customer => customer.ToCustomerResponse()).ToList();
+
+            return customers;
         }
     }
 }

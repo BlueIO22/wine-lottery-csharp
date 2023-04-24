@@ -21,11 +21,11 @@ namespace wine_lottery_csharp.Handlers
             _lotteryHandler = lotteryHandler;
         }
 
-        public async Task<List<LotteryTicket>> PurchaseLotteryTickets(PurchaseTicketRequest payment)
+        public async Task<Response<List<LotteryTicket>>> PurchaseLotteryTickets(PurchaseTicketRequest payment)
         {
             if (!await IsPurchaseRequestValid(payment))
             {
-                throw new Exception("Purchase request is not valid");
+                return new Response<List<LotteryTicket>>() { Status = ResponseStatus.NOT_ENOUGH_TICKETS };
             }
 
             PaymentMethod paymentMethod = await _paymentService.CreatePaymentMethod(payment.PaymentMethod);
@@ -47,11 +47,11 @@ namespace wine_lottery_csharp.Handlers
 
             if (paymentIntent.Status != Constants.PAYMENT_SUCCESS)
             {
-                throw new Exception("Payment was not successfull!");
+                return new Response<List<LotteryTicket>>() { Status = ResponseStatus.PAYMENT_NOT_SUCCESSFUL };
             }
 
 
-            return await GetAndMarkTickets(payment, customerId);
+            return new Response<List<LotteryTicket>> { Data = await GetAndMarkTickets(payment, customerId) };
         }
 
         private async Task<Customer> CreatePaymentCustomer(PurchaseTicketRequest payment)

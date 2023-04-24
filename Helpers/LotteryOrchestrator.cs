@@ -22,7 +22,7 @@ namespace wine_lottery_csharp.Helpers
             _ticketHandler = ticketHandler;
 
         }
-        public async Task<List<LotteryResult>> RunLottery(Guid lotteryId)
+        public async Task<Response<List<LotteryResult>>> RunLottery(Guid lotteryId)
         {
             List<LotteryResult> lotteryResults = new List<LotteryResult>();
 
@@ -32,18 +32,28 @@ namespace wine_lottery_csharp.Helpers
 
             var lottery = await GetLotteryById(lotteryId);
 
+            if (lottery.GetLotteryStatus() == LotteryStatus.FINISHED)
+            {
+                return new Response<List<LotteryResult>> { Status = ResponseStatus.LOTTERY_IS_FINISHED };
+            }
+
             foreach (WineResponse wine in wines)
             {
                 var lotteryResult = await RunLotteryIteration(lottery, wine);
-
-                // remove wine and ticket
 
                 await RemoveTicket(lotteryResult.Data.WinnerTicket);
 
                 lotteryResults.Add(lotteryResult.Data);
             }
 
-            return lotteryResults;
+            await MarkLotteryAsFinished(lotteryId);
+
+            return new Response<List<LotteryResult>> { Data = lotteryResults };
+        }
+
+        private Task MarkLotteryAsFinished(Guid lotteryId)
+        {
+            return _lotteryHandler.MarkLotteryAsFinished(lotteryId);
         }
 
         private Task RemoveTicket(LotteryTicket winnerTicket)

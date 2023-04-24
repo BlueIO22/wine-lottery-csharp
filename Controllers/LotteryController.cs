@@ -3,6 +3,7 @@ using wine_lottery_csharp.Controllers.Interfaces;
 using wine_lottery_csharp.Dto.Request;
 using wine_lottery_csharp.Handlers.Interfaces;
 using wine_lottery_csharp.Helpers;
+using wine_lottery_csharp.Repository.Helpers;
 
 namespace wine_lottery_csharp.Controllers
 {
@@ -14,37 +15,23 @@ namespace wine_lottery_csharp.Controllers
         private readonly ICustomerHandler _customerHandler;
         private readonly ILotteryHandler _lotteryHandler;
         private readonly ILotteryOrchestrator _lotteryOrchestrator;
+        private readonly ILotteryHelper _lotteryHelper;
 
-        public LotteryController(IPaymentHandler paymentHandler, ICustomerHandler customerHandler, ILotteryHandler lotteryHandler, ILotteryOrchestrator lotteryOrchestrator)
+        public LotteryController(IPaymentHandler paymentHandler, ICustomerHandler customerHandler, ILotteryHandler lotteryHandler, ILotteryOrchestrator lotteryOrchestrator, ILotteryHelper lotteryHelper)
         {
             _paymentHandler = paymentHandler;
             _customerHandler = customerHandler;
             _lotteryHandler = lotteryHandler;
             _lotteryOrchestrator = lotteryOrchestrator;
+            _lotteryHelper = lotteryHelper;
         }
 
-        [HttpPost]
+        [HttpPost("create-lottery")]
         public async Task<ActionResult> RegisterLottery([FromBody] LotteryRequest request)
         {
             var result = await _lotteryHandler.RegisterLottery(request);
 
-            return Ok(result);
-        }
-
-        [HttpPut("purchase-tickets")]
-        public async Task<ActionResult> PurchaseTickets([FromBody] PurchaseTicketRequest request)
-        {
-            var result = await _paymentHandler.PurchaseLotteryTickets(request);
-
-            return Ok(result);
-        }
-
-        [HttpGet("retrieve-customer")]
-        public async Task<ActionResult> GetCustomerById(string customerId, bool includeTickets)
-        {
-            var result = await _customerHandler.GetCustomer(customerId, includeTickets);
-
-            return Ok(result);
+            return Ok(_lotteryHelper.GetStatusString(result));
         }
 
         [HttpPut("run-lottery")]
@@ -52,15 +39,23 @@ namespace wine_lottery_csharp.Controllers
         {
             var result = await _lotteryOrchestrator.RunLottery(Guid.Parse(request.LotteryId));
 
-            return Ok(result);
+            return Ok(new
+            {
+                Data = result.Data,
+                Status = _lotteryHelper.GetStatusString(result.Status)
+            });
         }
 
-        [HttpGet]
+        [HttpGet("get-lottery")]
         public async Task<ActionResult> GetLotteryById(string lotteryId)
         {
             var result = await _lotteryHandler.GetLotteryById(Guid.Parse(lotteryId));
 
-            return Ok(result);
+            return Ok(new
+            {
+                Data = result.Data,
+                Status = _lotteryHelper.GetStatusString(result.Status)
+            });
         }
 
         [HttpPost("reset-tickets")]
@@ -68,7 +63,19 @@ namespace wine_lottery_csharp.Controllers
         {
             var result = await _lotteryHandler.ResetLotteryTickets(Guid.Parse(request.LotteryId), request.NumberOfTickets);
 
-            return Ok(result);
+            return Ok(_lotteryHelper.GetStatusString(result));
+        }
+
+        [HttpGet("get-lottery-by-name")]
+        public async Task<ActionResult> GetLotteryByName(string name)
+        {
+            var result = await _lotteryHandler.GetLotteryByName(name);
+
+            return Ok(new
+            {
+                Data = result.Data,
+                Status = _lotteryHelper.GetStatusString(result.Status)
+            });
         }
     }
 

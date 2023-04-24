@@ -22,7 +22,7 @@ namespace wine_lottery_csharp.Repository
 
         public Task RemoveWine(Wine wine)
         {
-            _context.Wine.Remove(wine);
+            _context.Wine.Update(wine);
             _context.SaveChanges();
             return Task.CompletedTask;
         }

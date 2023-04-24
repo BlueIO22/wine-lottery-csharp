@@ -1,4 +1,5 @@
-﻿using wine_lottery_csharp.Context.Dal;
+﻿using System.ComponentModel;
+using wine_lottery_csharp.Context.Dal;
 
 namespace wine_lottery_csharp.Repository.Helpers
 {
@@ -23,6 +24,19 @@ namespace wine_lottery_csharp.Repository.Helpers
             }
 
             return tickets;
+        }
+
+        public string GetStatusString(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+
+            if (field == null) return string.Empty;
+
+            if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+            {
+                return attribute.Description;
+            }
+            return string.Empty;
         }
     }
 }
