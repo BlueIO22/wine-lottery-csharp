@@ -26,4 +26,8 @@ Ved Cli:
  Diagram for databaseoppsett er her: 
 
  <img width="803" alt="image" src="https://user-images.githubusercontent.com/16582039/234012633-0a453097-71b5-4a70-b47d-20b6e2df8cb9.png">
+ 
+ ## Ting som gjenstår
+  - Enhetstester
+  - BDD testing med Gherkin
 
