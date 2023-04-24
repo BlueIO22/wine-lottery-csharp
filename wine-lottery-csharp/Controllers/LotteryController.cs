@@ -70,12 +70,6 @@ namespace wine_lottery_csharp.Controllers
 
             return Ok(result);
         }
-        
-        [HttpGet("get-feedback")]
-        public string GetFeedback(string lmao) 
-        {
-            return "hello" + lmao; 
-        }
     }
 
 

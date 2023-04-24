@@ -48,15 +48,9 @@ namespace wine_lottery_csharp.Repository
 
         public List<LotteryTicket> MarkLotteryTickets(string customerId, int numberOfTickets, string lotteryId)
         {
-            var tickets = _lotteryDbContext.Ticket.Where(ticket => ticket.LotteryId == lotteryId).ToList();
+            var tickets = _lotteryDbContext.Ticket.Where(ticket => ticket.LotteryId == lotteryId && ticket.CustomerId.Length > 0).ToList();
 
-            var numbers = tickets.Where(ticket => ticket.CustomerId.Length == 0).Select(ticket => ticket.Number).ToList();
-
-            var takenNumbers = tickets.Where(ticket => ticket.CustomerId.Length > 0).Select(ticket => ticket.Number).ToList();
-
-            var randomNumbers = _lotteryHelper.GetRandomNumbers(numbers, takenNumbers, numberOfTickets);
-
-            var filteredTickets = tickets.Where(ticket => randomNumbers.Any(x => x == ticket.Number)).ToList();
+            var filteredTickets = tickets.Take(numberOfTickets).ToList();
 
             filteredTickets.ForEach(ticket => ticket.CustomerId = customerId);
 
