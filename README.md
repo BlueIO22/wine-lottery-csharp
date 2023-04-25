@@ -32,4 +32,6 @@ Ved Cli:
  ## Ting som gjenstår
   - Enhetstester
   - BDD testing med Gherkin
+  - Lage en pool av tråder, slik at man kan kjøre flere operasjoner på samtidig
+  - Legge til cancellation token
 
