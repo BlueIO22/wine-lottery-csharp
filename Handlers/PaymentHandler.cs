@@ -37,7 +37,7 @@ namespace wine_lottery_csharp.Handlers
             PaymentRequest request = new PaymentRequest()
             {
                 Amount = 1000 * payment.AmountOfTickets,
-                Description = $"Payment for {payment.AmountOfTickets} to the lottery",
+                Description = $"Payment for {payment.AmountOfTickets} tickets to the lottery",
                 CustomerId = customerId,
                 PaymentMethodId = paymentMethod.Id,
                 StripeCustomer = stripeCustomer
